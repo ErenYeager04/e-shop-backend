@@ -26,7 +26,7 @@ app.use("/product", productRoutes)
 
 mongoose.connect(process.env.MONGOOSE_URL)
 .then( () => {
-  app.listen(process.env.PORT, () => {
+  app.listen(process.env.PORT || 4000, () => {
   console.log("listening on port " + process.env.PORT)
 })})
 .catch((err) => {
