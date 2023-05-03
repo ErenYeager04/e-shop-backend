@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 const userSignup = async (req, res) => {
   const {email, password} = req.body
   try{
+    // Validation results
     const error = validationResult(req)
     if (!error.isEmpty()){
       res.status(400).json("All field must be filled")
@@ -27,6 +28,7 @@ const userSignup = async (req, res) => {
 const userLogin = async (req, res) => {
   const { email, password } = req.body
   try{
+    // Validation results
     const error = validationResult(req)
     if (!error.isEmpty()){
       res.status(400).json("All field must be filled")

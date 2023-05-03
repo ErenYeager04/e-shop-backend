@@ -4,7 +4,7 @@ const Product = require('../models/Products')
 const makeCart = async (req, res) => {
   const { _id, quantity } = req.body
   const userId = req.user.id
-
+  // Check if user already has a cart or not
   const exists = await Cart.findOne({userId})
   if(!exists){
     // If cart for user does not exist, creates one
@@ -48,12 +48,12 @@ const makeCart = async (req, res) => {
 
 const getProductsFromCart = async (req, res) => {
   const userId = req.user.id
-
+  // Checks if user has a cart or not
   const exists = await Cart.findOne({userId})
   if(!exists){
     res.status(200).json('Your dont have a cart')
   } else{
-
+    // If has a cart joins two collections by id and takes quantity
     try{
     const result = await Cart.aggregate([
       { $match: { userId: userId } },
@@ -98,6 +98,7 @@ const getProductsFromCart = async (req, res) => {
 const deleteProduct = async (req, res) => {
   const userId = req.user.id
   const { _id } = req.body
+  // Deletes product from user cart
   try{
     const user = await Cart.findOne({userId})
     const result = await user.updateOne({ $pull: { cartProducts: { _id: _id } } })

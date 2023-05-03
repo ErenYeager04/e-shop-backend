@@ -5,7 +5,7 @@ const upload = multer({ dest: 'uploads/' })
 const checkRoleMiddleware = require('../middleware/checkRoleMiddleware')
 const authMiddleware = require('../middleware/authMiddleware')
 
-
+// Checks role and gets image
 router.post('/makeProduct', checkRoleMiddleware(), upload.single('img'), makeProduct)
 
 router.get('/getProducts', getProducts)

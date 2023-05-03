@@ -4,10 +4,13 @@ const { uploadFile } = require('../middleware/s3')
 
 const makeProduct = async (req, res) => {
   const { title, desc, price, type, brand} = req.body 
+  // Gets img from multer
   const file = req.file
   
   try{
+    // Uploads to AWS database
     const imgData = await uploadFile(file)
+    // Gets URL of img
     const img = imgData.Location
     const product = await Product.create({title, desc, img, price, type, brand})
     res.status(200).json(product)
@@ -20,11 +23,12 @@ const makeProduct = async (req, res) => {
 
 const getProducts = async (req, res) => {
   const {brand, type } = req.query
+  // Parses numbers
   const page = parseInt(req.query.page);
   const limit = parseInt(req.query.limit);
   
+  // Code to check everything is ok
   let startIndex = page
-
   if(page > 0){
     startIndex = (page - 1) * limit
 
@@ -43,6 +47,7 @@ const getProducts = async (req, res) => {
 
 
   try{
+    // Finds product by query
     const result = await Product.find(query).skip(startIndex).limit(limit)
     res.status(200).json(result)
 
@@ -66,10 +71,10 @@ const addRating = async (req, res) => {
   const { _id, rating } = req.body
   const userId = req.user.id
 
+  // Checks if user already rated or not
   const exists = await Product.findOne({ _id })
-
   const hasRating = exists.rating.find(p => p.userId == userId)
-
+  // If not adds rating
   if (!hasRating) {
     try {
       const newRating = {
